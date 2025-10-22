@@ -18,6 +18,11 @@ import "react-toastify/dist/ReactToastify.css";
 import UpgradeYourVision from "./Components/Pages/UpgradeYourVision";
 import Testimonials from "./Components/Pages/Testimonials";
 import AOS from 'aos';
+import About from "./Components/Pages/About";
+import Contact from "./Components/Pages/Contact";
+import MensEyeGlasses from "./Components/Pages/EyeGlasses/MensEyeGlasses";
+import WomensEyeGlasses from "./Components/Pages/EyeGlasses/WomensEyeGlasses";
+import KidsEyeGlasses from "./Components/Pages/EyeGlasses/KidsEyeGlasses";
 
 
 function App() {
@@ -39,7 +44,18 @@ function App() {
             <Route path="verifyOTP" element={<VerifyOTP></VerifyOTP>}></Route>
             <Route path="resetPassword" element={<ResetPassword></ResetPassword>}></Route>
             <Route path="successReset" element={<SuccessResetPassword></SuccessResetPassword>}></Route>
-             
+
+
+            {/* Aboutus */}
+            <Route path="aboutUs" element={<About></About>}></Route>
+
+            {/* Contact Us */}
+             <Route path="contactUs" element={<Contact></Contact>}></Route>
+
+             {/* EyeGlasses */}
+             <Route path="mensEyeGlasses" element={<MensEyeGlasses></MensEyeGlasses>}></Route>
+             <Route path="WomensEyeGlasses" element={<WomensEyeGlasses></WomensEyeGlasses>}></Route>
+             <Route path="KidsEyeGlasses" element={<KidsEyeGlasses></KidsEyeGlasses>}></Route>
 
               <Route path="wishlist" element={<Wishlist />} />
             <Route path="cart" element={<AddToCart />} />
