@@ -19,6 +19,13 @@ const Navbar = () => {
   const [isTopFramesOpen, setIsTopFramesOpen] = useState(false);
   const [activeButton, setActiveButton] = useState("");
 
+  // Function to handle navigation and close modal
+  const handleNavigation = (path) => {
+    // Close the modal first
+    setIsEyeglassesOpen(false);
+    // Navigation will be handled by the Link component
+  };
+
   return (
     <div className="max-w-[90%] mx-auto">
       {/* Main Navbar */}
@@ -31,7 +38,7 @@ const Navbar = () => {
         <div className="hidden lg:flex justify-between items-center gap-6">
           <button 
             onClick={() => setIsEyeglassesOpen(true)}
-            className={`${setIsEyeglassesOpen}`}
+            className={`text-[#222222] text-base hover:text-[#FD7D68] transition-colors`}
           >
             Eyeglasses
           </button>
@@ -48,8 +55,8 @@ const Navbar = () => {
             Top Frames
           </button>
           {/* <Link to='/accessories'><p className="text-[#222222] text-base py-2 hover:text-[#FD7D68]">Accessories</p></Link> */}
-          <p className="text-[#222222] text-base hover:text-[#FD7D68]">Contact</p>
-          <p className="text-[#222222] text-base hover:text-[#FD7D68]">About Us</p>
+          <Link to='/contactUs'><p className="text-[#222222] text-base hover:text-[#FD7D68]">Contact</p></Link>
+          <Link to='/aboutUs'><p className="text-[#222222] text-base hover:text-[#FD7D68]">About Us</p></Link>
         </div>
 
         {/* Desktop Icons - Hidden on mobile and md */}
@@ -68,8 +75,8 @@ const Navbar = () => {
             <button onClick={() => setIsSearchOpen(true)}>
               <img src={mg} alt="Search" className="w-6 h-6" />
             </button>
-            <img src={wishlist} alt="Wishlist" className="w-6 h-6" />
-            <img src={cart} alt="Cart" className="w-5 h-5" />
+            <Link to='/wishlist'><img src={wishlist} alt="Wishlist" className="w-6 h-6" /></Link>
+            <Link to='/cart'><img src={cart} alt="Cart" className="w-5 h-5" /></Link>
            <Link to='/signup'> <img src={profile} alt="Profile" className="w-5 h-5" /></Link>
           </div>
           <button 
@@ -105,8 +112,8 @@ const Navbar = () => {
             Top Frames
           </button>
           <Link to='/accessories'><p className="text-[#222222] text-base py-2 hover:text-[#FD7D68]">Accessories</p></Link>
-          <p className="text-[#222222] text-base py-2 border-b hover:text-[#FD7D68]">Contact</p>
-          <p className="text-[#222222] text-base py-2 border-b hover:text-[#FD7D68]">About Us</p>
+          <Link to='/contactUs'><p className="text-[#222222] text-base py-2 border-b hover:text-[#FD7D68]">Contact</p></Link>
+         <Link to='/aboutUs'> <p className="text-[#222222] text-base py-2 border-b hover:text-[#FD7D68]">About Us</p></Link>
         </div>
       </div>
 
@@ -139,89 +146,128 @@ const Navbar = () => {
         </div>
       )}
 
-      {/* Eyeglasses Modal */}
+      {/* Eyeglasses Modal - WITH CLICKABLE LINKS */}
       {isEyeglassesOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-start justify-center pt-32 md:pr-8 lg:pr-12">
           <div className="relative w-full max-w-4xl mx-4">
-  {/* 👇 Curved Pointer Add-on (safe, outside the card) */}
-  <div className="hidden md:block absolute -top-3 left-60">
-    <div className="w-10 h-10 bg-white rotate-45  rounded-xl"></div>
-  </div>
+            {/* 👇 Curved Pointer Add-on (safe, outside the card) */}
+            <div className="hidden md:block absolute -top-3 left-60">
+              <div className="w-10 h-10 bg-white rotate-45 rounded-xl"></div>
+            </div>
 
-  {/* 👇 Your untouched original card code */}
-  <div className="bg-white rounded-lg shadow-xl w-full animate-scaleIn max-h-[80vh] overflow-hidden flex flex-col">
-    <div className="flex justify-end items-center p-4 flex-shrink-0">
-      <button
-        onClick={() => setIsEyeglassesOpen(false)}
-        className="text-gray-500 hover:text-gray-700 text-2xl font-bold p-1"
-      >
-        ×
-      </button>
-    </div>
+            {/* 👇 Your untouched original card code */}
+            <div className="bg-white rounded-lg shadow-xl w-full animate-scaleIn max-h-[80vh] overflow-hidden flex flex-col">
+              <div className="flex justify-end items-center p-4 flex-shrink-0">
+                <button
+                  onClick={() => setIsEyeglassesOpen(false)}
+                  className="text-gray-500 hover:text-gray-700 text-2xl font-bold p-1"
+                >
+                  ×
+                </button>
+              </div>
 
-    <div className="px-6 pb-6 overflow-y-auto">
-      {/* Categories Section */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-4">
-        <div className="text-center">
-          <img className="h-48 w-48 md:h-64 md:w-64" src={mensEyeGlasses} alt="Men's Eyewear" />
-          <p className="text-center font-amiri text-[#222222] text-xl md:text-2xl mt-2">Men's Eyewear</p>
-        </div>
-        <div className="text-center">
-          <img className="h-48 w-48 md:h-64 md:w-64" src={womensEyeGlasses} alt="Women's Eyewear" />
-          <p className="text-center font-amiri text-[#222222] text-xl md:text-2xl mt-2">Women's Eyewear</p>
-        </div>
-        <div className="text-center">
-          <img className="h-48 w-48 md:h-64 md:w-64" src={kidsEyeGlasses} alt="Kid's Eyewear" />
-          <p className="text-center font-amiri text-[#222222] text-xl md:text-2xl mt-2">Kid's Eyewear</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+              <div className="px-6 pb-6 overflow-y-auto">
+                {/* Categories Section */}
+                <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-4">
+                  {/* Men's Eyewear - Clickable Link */}
+                  <Link 
+                    to="/mensEyeGlasses" 
+                    className="text-center group cursor-pointer"
+                    onClick={() => handleNavigation("/mensEyeGlasses")}
+                  >
+                    <div className="overflow-hidden rounded-lg">
+                      <img 
+                        className="h-48 w-48 md:h-64 md:w-64 object-cover group-hover:scale-105 transition-transform duration-300" 
+                        src={mensEyeGlasses} 
+                        alt="Men's Eyewear" 
+                      />
+                    </div>
+                    <p className="text-center font-amiri text-[#222222] text-xl md:text-2xl mt-2 group-hover:text-[#FD7D68] transition-colors">
+                      Men's Eyewear
+                    </p>
+                  </Link>
 
+                  {/* Women's Eyewear - Clickable Link */}
+                  <Link 
+                    to="/WomensEyeGlasses" 
+                    className="text-center group cursor-pointer"
+                    onClick={() => handleNavigation("/WomensEyeGlasses")}
+                  >
+                    <div className="overflow-hidden rounded-lg">
+                      <img 
+                        className="h-48 w-48 md:h-64 md:w-64 object-cover group-hover:scale-105 transition-transform duration-300" 
+                        src={womensEyeGlasses} 
+                        alt="Women's Eyewear" 
+                      />
+                    </div>
+                    <p className="text-center font-amiri text-[#222222] text-xl md:text-2xl mt-2 group-hover:text-[#FD7D68] transition-colors">
+                      Women's Eyewear
+                    </p>
+                  </Link>
+
+                  {/* Kid's Eyewear - Clickable Link */}
+                  <Link 
+                    to="/KidsEyeGlasses" 
+                    className="text-center group cursor-pointer"
+                    onClick={() => handleNavigation("/KidsEyeGlasses")}
+                  >
+                    <div className="overflow-hidden rounded-lg">
+                      <img 
+                        className="h-48 w-48 md:h-64 md:w-64 object-cover group-hover:scale-105 transition-transform duration-300" 
+                        src={kidsEyeGlasses} 
+                        alt="Kid's Eyewear" 
+                      />
+                    </div>
+                    <p className="text-center font-amiri text-[#222222] text-xl md:text-2xl mt-2 group-hover:text-[#FD7D68] transition-colors">
+                      Kid's Eyewear
+                    </p>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Sunglasses Modal */}
+      {/* Sunglasses Modal - WITHOUT CLICKABLE LINKS (ORIGINAL VERSION) */}
       {isSunglassesOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-start justify-center pt-32 md:pr-8 lg:pr-12">
           <div className="relative w-full max-w-4xl mx-4">
-  {/* 👇 Curved Pointer Add-on (safe, outside the card) */}
-  <div className="hidden md:block absolute -top-3 left-80">
-    <div className="w-10 h-10 bg-white rotate-45 rounded-lg"></div>
-  </div>
+            {/* 👇 Curved Pointer Add-on (safe, outside the card) */}
+            <div className="hidden md:block absolute -top-3 left-80">
+              <div className="w-10 h-10 bg-white rotate-45 rounded-lg"></div>
+            </div>
 
-  {/* 👇 Your original card code */}
-  <div className="bg-white rounded-lg shadow-xl w-full animate-scaleIn max-h-[80vh] overflow-hidden flex flex-col">
-    <div className="flex justify-end items-center p-4">
-      <button 
-        onClick={() => setIsSunglassesOpen(false)}
-        className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
-      >
-        ×
-      </button>
-    </div>
-    
-    <div className="px-6 pb-6 overflow-y-auto">
-      {/* Categories Section */}
-      <div className="mb-8 flex flex-col md:flex-row justify-between items-center">
-        <div>
-          <img className="h-64 w-64" src={mensSunglass} alt="" />
-          <p className="text-center font-amiri text-[#222222] text-2xl">Men</p>
-        </div>
-        <div>
-          <img className="h-64 w-64" src={womensSunglass} alt="" />
-          <p className="text-center font-amiri text-[#222222] text-2xl">Women</p>
-        </div>
-        <div>
-          <img className="h-64 w-64" src={kidsSunglass} alt="" />
-          <p className="text-center font-amiri text-[#222222] text-2xl">Kids</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+            {/* 👇 Your original card code */}
+            <div className="bg-white rounded-lg shadow-xl w-full animate-scaleIn max-h-[80vh] overflow-hidden flex flex-col">
+              <div className="flex justify-end items-center p-4">
+                <button 
+                  onClick={() => setIsSunglassesOpen(false)}
+                  className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="px-6 pb-6 overflow-y-auto">
+                {/* Categories Section */}
+                <div className="mb-8 flex flex-col md:flex-row justify-between items-center">
+                  <div>
+                    <img className="h-64 w-64" src={mensSunglass} alt="" />
+                    <p className="text-center font-amiri text-[#222222] text-2xl">Men</p>
+                  </div>
+                  <div>
+                    <img className="h-64 w-64" src={womensSunglass} alt="" />
+                    <p className="text-center font-amiri text-[#222222] text-2xl">Women</p>
+                  </div>
+                  <div>
+                    <img className="h-64 w-64" src={kidsSunglass} alt="" />
+                    <p className="text-center font-amiri text-[#222222] text-2xl">Kids</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -229,51 +275,50 @@ const Navbar = () => {
       {isTopFramesOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-[9999] flex items-start justify-center pt-32 md:pr-8 lg:pr-12">
           <div className="relative w-full max-w-4xl mx-4">
-  {/* 👇 Curved Pointer Add-on (safe, outside the card) */}
-  <div className="hidden md:block absolute -top-3 left-[48%]">
-    <div className="w-10 h-10 bg-white rotate-45 rounded-lg"></div>
-  </div>
+            {/* 👇 Curved Pointer Add-on (safe, outside the card) */}
+            <div className="hidden md:block absolute -top-3 left-[48%]">
+              <div className="w-10 h-10 bg-white rotate-45 rounded-lg"></div>
+            </div>
 
-  {/* 👇 Your original Top Frames card */}
-  <div className="bg-white rounded-lg shadow-xl w-full animate-scaleIn max-h-[80vh] overflow-hidden flex flex-col">
-    <div className="flex justify-end items-center p-4 flex-shrink-0">
-      <button 
-        onClick={() => setIsTopFramesOpen(false)}
-        className="text-gray-500 hover:text-gray-700 text-2xl font-bold p-1"
-      >
-        ×
-      </button>
-    </div>
-    
-    <div className="px-6 pb-6 overflow-y-auto">
-      {/* Top Frames Content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left Column - Classics */}
-        <div>
-          <h3 className="font-amiri text-2xl text-[#222222] mb-4 border-b pb-2">Classics</h3>
-          <ul className="space-y-3">
-            <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">All Tops</li>
-            <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">New Arrivals</li>
-            <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Best Sellers</li>
-            <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Sun Tops</li>
-          </ul>
-        </div>
+            {/* 👇 Your original Top Frames card */}
+            <div className="bg-white rounded-lg shadow-xl w-full animate-scaleIn max-h-[80vh] overflow-hidden flex flex-col">
+              <div className="flex justify-end items-center p-4 flex-shrink-0">
+                <button 
+                  onClick={() => setIsTopFramesOpen(false)}
+                  className="text-gray-500 hover:text-gray-700 text-2xl font-bold p-1"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="px-6 pb-6 overflow-y-auto">
+                {/* Top Frames Content */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Left Column - Classics */}
+                  <div>
+                    <h3 className="font-amiri text-2xl text-[#222222] mb-4 border-b pb-2">Classics</h3>
+                    <ul className="space-y-3">
+                      <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">All Tops</li>
+                      <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">New Arrivals</li>
+                      <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Best Sellers</li>
+                      <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Sun Tops</li>
+                    </ul>
+                  </div>
 
-        {/* Right Column - Limited Edition */}
-        <div>
-          <h3 className="font-amiri text-2xl text-[#222222] mb-4 border-b pb-2">Limited Edition</h3>
-          <ul className="space-y-3">
-            <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Gourdgeous</li>
-            <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Spooky Nights</li>
-            <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Summer Medley</li>
-            <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Seasonal Solids</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+                  {/* Right Column - Limited Edition */}
+                  <div>
+                    <h3 className="font-amiri text-2xl text-[#222222] mb-4 border-b pb-2">Limited Edition</h3>
+                    <ul className="space-y-3">
+                      <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Gourdgeous</li>
+                      <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Spooky Nights</li>
+                      <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Summer Medley</li>
+                      <li className="text-[#666666] hover:text-[#FD7D68] cursor-pointer transition-colors">Seasonal Solids</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
