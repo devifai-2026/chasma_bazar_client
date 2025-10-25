@@ -7,6 +7,7 @@ import glassImg1 from "../../assets/BestSellers/Sunglass.svg";
 import img from "../../assets/Wishlist/Frame (4).svg"
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Link } from "react-router-dom";
 
 const AddToCart = () => {
   const [CardData, setCardData] = useState([
@@ -230,9 +231,21 @@ const handleRemove =(index)=>{
     </p>
 
     <div className="flex justify-center md:justify-end pr-0 md:pr-6"  data-aos="fade-up" data-aos-delay={300}>
-      <button className="mt-4 bg-[#FD7D68] text-white px-6 py-3 rounded-full text-lg font-medium hover:bg-[#fc6b54] transition">
-        Proceed To Checkout
-      </button>
+    
+<Link 
+  to='/checkout'
+  state={{
+    cartData: CardData,
+    quantities: quantities,
+    totalPrice: totalPrice,
+    discount: discount,
+    payable: payable
+  }}
+>
+  <button className="mt-4 bg-[#FD7D68] text-white px-6 py-3 rounded-full text-lg font-medium hover:bg-[#fc6b54] transition">
+    Proceed To Checkout
+  </button>
+</Link>
     </div>
   </div>
 )}
