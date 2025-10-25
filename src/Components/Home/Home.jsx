@@ -1,3 +1,4 @@
+import AffiliateMarketer from "./AffiliateMarketer";
 import Banner from "./Banner";
 import BestSellers from "./BestSellers";
 import ExploreCollection from "./ExploreCollection";
@@ -17,6 +18,7 @@ const Home = () => {
            <ExploreCollection></ExploreCollection>
            <WhyChooseUs></WhyChooseUs>
            <ForEveryOne></ForEveryOne>
+           <AffiliateMarketer></AffiliateMarketer>
            <HappyCustomer></HappyCustomer>
         </div>
     );

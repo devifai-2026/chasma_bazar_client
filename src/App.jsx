@@ -23,6 +23,9 @@ import Contact from "./Components/Pages/Contact";
 import MensEyeGlasses from "./Components/Pages/EyeGlasses/MensEyeGlasses";
 import WomensEyeGlasses from "./Components/Pages/EyeGlasses/WomensEyeGlasses";
 import KidsEyeGlasses from "./Components/Pages/EyeGlasses/KidsEyeGlasses";
+import Affiliate from "./Components/Pages/Affiliate";
+import Checkout from "./Components/Pages/Checkout";
+import Payment from "./Components/Pages/Payment";
 
 
 function App() {
@@ -52,6 +55,10 @@ function App() {
             {/* Contact Us */}
              <Route path="contactUs" element={<Contact></Contact>}></Route>
 
+             {/* Affiliate */}
+              <Route path="affiliate" element={<Affiliate></Affiliate>}></Route>
+
+
              {/* EyeGlasses */}
              <Route path="mensEyeGlasses" element={<MensEyeGlasses></MensEyeGlasses>}></Route>
              <Route path="WomensEyeGlasses" element={<WomensEyeGlasses></WomensEyeGlasses>}></Route>
@@ -59,6 +66,8 @@ function App() {
 
               <Route path="wishlist" element={<Wishlist />} />
             <Route path="cart" element={<AddToCart />} />
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="payment" element={<Payment />} />
             <Route path="UpgradeYourVision" element ={<UpgradeYourVision/>}/>
             <Route path="Testimonials" element ={<Testimonials/>}/>
           </Route>
