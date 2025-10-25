@@ -3,11 +3,25 @@ import Breadcrumbs from '../../Breadcrumbs';
 import heroImg1 from "../../../assets/HomeHeroImg1.png";
 import img from "../../../assets/Eyeglasses/meg.svg";
 import filter from "../../../assets/Eyeglasses/filter.svg";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import star from "../../../assets/BestSellers/star.svg";
 import whiteStar from "../../../assets/BestSellers/whiteStar.svg";
+
+// Import frame type images
+import fullRimIcon from "../../../assets/Eyeglasses/fullrim.svg";
+import halfRimIcon from "../../../assets/Eyeglasses/halfrim.svg"; 
+import rimlessIcon from "../../../assets/Eyeglasses/rimless.svg"; 
+
+// import frame shape
+import rectangle from "../../../assets/Eyeglasses/rectangle.svg"
+import square from "../../../assets/Eyeglasses/square.svg"
+import cateye from "../../../assets/Eyeglasses/catseye.svg"
+import geometric from "../../../assets/Eyeglasses/geometric.svg"
+import round from "../../../assets/Eyeglasses/round.svg"
+import aviator from "../../../assets/Eyeglasses/avaitor.svg"
+import clubmaster from "../../../assets/Eyeglasses/clubmaster.svg"
 
 // Import the same images as NewArrivals
 import eyeglassBlue from '../../../assets/BestSellers/glassimg2blue-removebg-preview.png';
@@ -25,7 +39,7 @@ import eyeglassGreenHover from '../../../assets/BestSellers/glassImgreen-removeb
 import roundYellow from '../../../assets/BestSellers/card2Img2yellow-removebg-preview.png';
 import roundDarkGreen from '../../../assets/BestSellers/card2Img2darkgreen-removebg-preview.png';
 import roundChoco from '../../../assets/BestSellers/card2Img2choco-removebg-preview.png';
-import roundViolet from '../../../assets/BestSellers/card2Img1voliet-removebg-preview.png';
+import roundViolet from '../../../assets/BestSellers/card2Img2voliet-removebg-preview.png';
 import roundBlue from '../../../assets/BestSellers/card2Img2blue-removebg-preview.png';
 
 import roundYellowHover from '../../../assets/BestSellers/card2Img1yellow-removebg-preview.png';
@@ -67,6 +81,8 @@ import minimalSilverHover from '../../../assets/BestSellers/card5img3hover-remov
 import premiumMain from '../../../assets/BestSellers/card6img1-removebg-preview.png';
 import premiumHover from '../../../assets/BestSellers/card6hoverimg1-removebg-preview.png';
 
+import tryon from "../../../assets/Eyeglasses/graytryon.svg"
+
 // Color palettes (same as NewArrivals)
 const staticColors = ["#5C99CD", "#FEAA00", "#EE3431", "#BE9298", "#B5F306"];
 const staticColorsCard2 = ["#3C3B5B", "#4A4A42", "#F4F4F4", "#535246"];
@@ -79,6 +95,22 @@ const MensEyeGlasses = () => {
     const [wishlist, setWishlist] = useState([]);
     const [selectedColors, setSelectedColors] = useState({});
     const [hoverStates, setHoverStates] = useState({});
+    const [showFilter, setShowFilter] = useState(false);
+    const [activeFilters, setActiveFilters] = useState({
+        frameType: [],
+        frameShape: [],
+        frameColor: [],
+        brands: [],
+        frameSize: [],
+        price: [],
+        gender: [],
+        material: [],
+        prescriptionType: [],
+        supportedPowers: [],
+        productType: []
+    });
+    const [openDropdown, setOpenDropdown] = useState(null);
+    const [sortBy, setSortBy] = useState('recommended'); // Add sort state
 
     // ✅ Load wishlist from localStorage
     useEffect(() => {
@@ -133,6 +165,355 @@ const MensEyeGlasses = () => {
         if (isHovered && product.hoverImage) return product.hoverImage;
         return Array.isArray(product.image) ? product.image[0] : product.image;
     };
+
+    // Filter options data with actual images
+    const filterOptions = {
+        frameType: [
+            { id: 'full', name: 'Full frame', icon: fullRimIcon },
+            { id: 'half', name: 'Half frame', icon: halfRimIcon },
+            { id: 'rimless', name: 'Rimless', icon: rimlessIcon }
+        ],
+        frameShape: [
+            { id: 'rectangle', name: 'Rectangle', icon: rectangle },
+            { id: 'square', name: 'Square', icon: square },
+            { id: 'cat-eye', name: 'Cat Eye', icon: cateye },
+            { id: 'geometric', name: 'Geometric', icon: geometric },
+            { id: 'round', name: 'Round', icon: round },
+            { id: 'aviator', name: 'Aviator', icon: aviator },
+            { id: 'clubmaster', name: 'Clubmaster', icon: clubmaster }
+        ],
+        frameColor: [
+            { id: 'black', name: 'Black', count: 10 },
+            { id: 'blue', name: 'Blue', count: 2 },
+            { id: 'brown', name: 'Brown', count: 1 },
+            { id: 'green', name: 'Green', count: 1 },
+            { id: 'silver', name: 'Silver', count: 1 },
+            { id: 'gunmetal', name: 'Gunmetal', count: 1 }
+        ],
+        brands: [
+            { id: 'rayban', name: 'Ray-Ban' },
+            { id: 'oakley', name: 'Oakley' },
+            { id: 'gucci', name: 'Gucci' },
+            { id: 'prada', name: 'Prada' },
+            { id: 'versace', name: 'Versace' }
+        ],
+        frameSize: [
+            { id: 'small', name: 'Small (130-135mm)' },
+            { id: 'medium', name: 'Medium (135-140mm)' },
+            { id: 'large', name: 'Large (140-145mm)' },
+            { id: 'xlarge', name: 'Extra Large (145mm+)' }
+        ],
+        price: [
+            { id: 'under2000', name: 'Under ₹2000' },
+            { id: '2000-3000', name: '₹2000 - ₹3000' },
+            { id: '3000-4000', name: '₹3000 - ₹4000' },
+            { id: '4000-5000', name: '₹4000 - ₹5000' },
+            { id: 'over5000', name: 'Over ₹5000' }
+        ],
+        gender: [
+            { id: 'men', name: 'Men' },
+            { id: 'women', name: 'Women' },
+            { id: 'unisex', name: 'Unisex' }
+        ],
+        material: [
+            { id: 'acetate', name: 'Acetate' },
+            { id: 'metal', name: 'Metal' },
+            { id: 'titanium', name: 'Titanium' },
+            { id: 'plastic', name: 'Plastic' },
+            { id: 'wood', name: 'Wood' }
+        ],
+        prescriptionType: [
+            { id: 'single', name: 'Single Vision' },
+            { id: 'bifocal', name: 'Bifocal' },
+            { id: 'progressive', name: 'Progressive' },
+            { id: 'computer', name: 'Computer Glasses' }
+        ],
+        supportedPowers: [
+            { id: 'low', name: 'Low Power (0 to -2.00)' },
+            { id: 'medium', name: 'Medium Power (-2.25 to -4.00)' },
+            { id: 'high', name: 'High Power (-4.25 to -6.00)' },
+            { id: 'veryhigh', name: 'Very High Power (-6.25+)' }
+        ],
+        productType: [
+            { id: 'regular', name: 'Regular' },
+            { id: 'premium', name: 'Premium' },
+            { id: 'designer', name: 'Designer' },
+            { id: 'sports', name: 'Sports' }
+        ]
+    };
+
+    const toggleFilter = (category, value) => {
+        setActiveFilters(prev => ({
+            ...prev,
+            [category]: prev[category].includes(value)
+                ? prev[category].filter(item => item !== value)
+                : [...prev[category], value]
+        }));
+    };
+
+    const clearAllFilters = () => {
+        setActiveFilters({
+            frameType: [],
+            frameShape: [],
+            frameColor: [],
+            brands: [],
+            frameSize: [],
+            price: [],
+            gender: [],
+            material: [],
+            prescriptionType: [],
+            supportedPowers: [],
+            productType: []
+        });
+        setSortBy('recommended'); // Also reset sorting
+    };
+
+    const toggleDropdown = (dropdownName) => {
+        setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
+    };
+
+    // Handle sort selection separately
+    const handleSortSelect = (sortValue) => {
+        setSortBy(sortValue);
+        setOpenDropdown(null); // Close dropdown after selection
+    };
+
+    // Custom Dropdown Component
+    const CustomDropdown = ({ title, options, filterKey, isOpen, onToggle }) => {
+        return (
+            <div className="relative">
+                <div 
+                    className="w-full p-3 rounded-lg cursor-pointer bg-white flex justify-between items-center hover:bg-gray-50 transition-colors"
+                    onClick={() => onToggle(filterKey)}
+                >
+                    <span className="text-sm font-medium">{title}</span>
+                    <svg 
+                        className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                
+                {isOpen && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+                        {options.map((option) => (
+                            <div 
+                                key={option.id}
+                                className="flex items-center gap-3 p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                                onClick={() => {
+                                    if (filterKey === 'sortBy') {
+                                        handleSortSelect(option.id);
+                                    } else {
+                                        toggleFilter(filterKey, option.id);
+                                    }
+                                }}
+                            >
+                                <div className={`w-5 h-5 border-2 rounded flex items-center justify-center ${
+                                    filterKey === 'sortBy' 
+                                        ? (sortBy === option.id ? 'bg-[#FD7D68] border-[#FD7D68]' : 'border-gray-300')
+                                        : (activeFilters[filterKey]?.includes(option.id) 
+                                            ? 'bg-[#FD7D68] border-[#FD7D68]' 
+                                            : 'border-gray-300')
+                                }`}>
+                                    {(filterKey === 'sortBy' ? sortBy === option.id : activeFilters[filterKey]?.includes(option.id)) && (
+                                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    )}
+                                </div>
+                                <span className="text-sm text-gray-700">{option.name}</span>
+                                {option.count && (
+                                    <span className="text-xs text-gray-500 ml-auto">({option.count})</span>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    // Filter Sidebar Component
+    const FilterSidebar = () => (
+        <div className="w-80 bg-white border border-gray-200 rounded-lg shadow-lg p-6 h-fit">
+            <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-semibold">Filters</h3>
+                <div className="flex items-center gap-2">
+                    <button 
+                        onClick={clearAllFilters}
+                        className="text-[#FD7D68] hover:text-[#e56a55] text-sm font-medium"
+                    >
+                        Clear All
+                    </button>
+                    {/* Close button for mobile/tablet */}
+                    <button 
+                        onClick={() => setShowFilter(false)}
+                        className="lg:hidden text-gray-500 hover:text-gray-700"
+                    >
+                        <FaTimes className="w-5 h-5" />
+                    </button>
+                </div>
+            </div>
+            
+            <div className="space-y-6">
+                {/* FRAME TYPE - Fixed layout */}
+                <div>
+                    <h4 className="font-semibold text-lg mb-3">FRAME TYPE</h4>
+                    <div className="grid grid-cols-3 gap-3">
+                        {filterOptions.frameType.map((type) => (
+                            <div 
+                                key={type.id}
+                                className={`flex flex-col items-center p-1 rounded-lg cursor-pointer transition-all  ${
+                                    activeFilters.frameType.includes(type.id) 
+                                        ? 'bg-[#FD7D68] bg-opacity-10 border-[#FD7D68]' 
+                                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                }`}
+                                onClick={() => toggleFilter('frameType', type.id)}
+                            >
+                                <div className="w-16 h-16 flex items-center justify-center  rounded-lg mb-2">
+                                    <img 
+                                        src={type.icon} 
+                                        alt={type.name}
+                                        className="w-16 h-16 object-contain"
+                                    />
+                                </div>
+                                <span className={`text-xs font-medium text-center ${
+                                    activeFilters.frameType.includes(type.id) ? 'text-[#FD7D68]' : 'text-gray-700'
+                                }`}>
+                                    {type.name}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* FRAME SHAPE - Updated with actual images */}
+                <div>
+                    <h4 className="font-semibold text-lg mb-3">FRAME SHAPE</h4>
+                    <div className="grid grid-cols-3 gap-3">
+                        {filterOptions.frameShape.map((shape) => (
+                            <div 
+                                key={shape.id}
+                                className={`flex flex-col items-center p-1 rounded-lg cursor-pointer transition-all ${
+                                    activeFilters.frameShape.includes(shape.id) 
+                                        ? 'bg-[#FD7D68] bg-opacity-30 border-[#FD7D68]' 
+                                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                }`}
+                                onClick={() => toggleFilter('frameShape', shape.id)}
+                            >
+                                <div className="w-16 h-16 flex items-center justify-center rounded-lg mb-2">
+                                    <img 
+                                        src={shape.icon} 
+                                        alt={shape.name}
+                                        className="w-16 h-16 object-contain bg-gray-100 rounded-md"
+                                    />
+                                </div>
+                                <span className={`text-xs font-medium text-center ${
+                                    activeFilters.frameShape.includes(shape.id) ? 'text-[#FD7D68]' : 'text-gray-700'
+                                }`}>
+                                    {shape.name}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Custom Dropdown Filters */}
+                <div className="space-y-4">
+                    <CustomDropdown 
+                        title="FRAME COLOR"
+                        options={filterOptions.frameColor}
+                        filterKey="frameColor"
+                        isOpen={openDropdown === 'frameColor'}
+                        onToggle={toggleDropdown}
+                    />
+
+                    <CustomDropdown 
+                        title="BRANDS"
+                        options={filterOptions.brands}
+                        filterKey="brands"
+                        isOpen={openDropdown === 'brands'}
+                        onToggle={toggleDropdown}
+                    />
+
+                    <CustomDropdown 
+                        title="FRAME SIZE"
+                        options={filterOptions.frameSize}
+                        filterKey="frameSize"
+                        isOpen={openDropdown === 'frameSize'}
+                        onToggle={toggleDropdown}
+                    />
+
+                    <CustomDropdown 
+                        title="PRICE"
+                        options={filterOptions.price}
+                        filterKey="price"
+                        isOpen={openDropdown === 'price'}
+                        onToggle={toggleDropdown}
+                    />
+
+                    <CustomDropdown 
+                        title="GENDER"
+                        options={filterOptions.gender}
+                        filterKey="gender"
+                        isOpen={openDropdown === 'gender'}
+                        onToggle={toggleDropdown}
+                    />
+
+                    <CustomDropdown 
+                        title="MATERIAL"
+                        options={filterOptions.material}
+                        filterKey="material"
+                        isOpen={openDropdown === 'material'}
+                        onToggle={toggleDropdown}
+                    />
+
+                    <CustomDropdown 
+                        title="PRESCRIPTION TYPE"
+                        options={filterOptions.prescriptionType}
+                        filterKey="prescriptionType"
+                        isOpen={openDropdown === 'prescriptionType'}
+                        onToggle={toggleDropdown}
+                    />
+
+                    <CustomDropdown 
+                        title="SUPPORTED POWERS"
+                        options={filterOptions.supportedPowers}
+                        filterKey="supportedPowers"
+                        isOpen={openDropdown === 'supportedPowers'}
+                        onToggle={toggleDropdown}
+                    />
+
+                    <CustomDropdown 
+                        title="PRODUCT TYPE"
+                        options={filterOptions.productType}
+                        filterKey="productType"
+                        isOpen={openDropdown === 'productType'}
+                        onToggle={toggleDropdown}
+                    />
+
+                    {/* Sort By Dropdown - Fixed */}
+                    <CustomDropdown 
+                        title="SORT BY"
+                        options={[
+                            { id: 'recommended', name: 'Recommended' },
+                            { id: 'price-low', name: 'Price: Low to High' },
+                            { id: 'price-high', name: 'Price: High to Low' },
+                            { id: 'newest', name: 'Newest First' },
+                            { id: 'popular', name: 'Most Popular' },
+                            { id: 'rating', name: 'Highest Rated' }
+                        ]}
+                        filterKey="sortBy"
+                        isOpen={openDropdown === 'sortBy'}
+                        onToggle={toggleDropdown}
+                    />
+                </div>
+            </div>
+        </div>
+    );
 
     // Products data (12 cards total)
     const products = [
@@ -271,6 +652,34 @@ const MensEyeGlasses = () => {
         }
     ];
 
+    // Sort products based on selected sort option
+     const sortedProducts = [...products].sort((a, b) => {
+        switch (sortBy) {
+            case 'price-low':
+                return parseInt(a.price) - parseInt(b.price);
+            case 'price-high':
+                return parseInt(b.price) - parseInt(a.price);
+            case 'newest':
+                // Assuming higher ID means newer - adjust based on your data
+                return b.id - a.id;
+            case 'popular': {
+                // Sort by rating count - extract number from rating string
+                const aCount = parseInt(a.rating.match(/\((\d+)\)/)?.[1] || 0);
+                const bCount = parseInt(b.rating.match(/\((\d+)\)/)?.[1] || 0);
+                return bCount - aCount;
+            }
+            case 'rating': {
+                // Sort by rating value
+                const aRating = parseFloat(a.rating);
+                const bRating = parseFloat(b.rating);
+                return bRating - aRating;
+            }
+            case 'recommended':
+            default:
+                return 0; // Keep original order
+        }
+    });
+
     return (
         <div>
             <div
@@ -297,76 +706,116 @@ const MensEyeGlasses = () => {
                 >
                     <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold tracking-wide uppercase">Mens EyeGlasses</h2>
                 </div>
+
                 <div
                     className="hidden md:block absolute right-6 bottom-0"
                     data-aos="fade-left"
                     data-aos-delay="200"
                 >
+                     
                     <img src={img} alt="" className="h-[285px] object-contain" />
                 </div>
             </div>
 
             {/* Header with Filter */}
-            <div className='flex items-center justify-between max-w-[90%] mx-auto mt-10'>
+            <div className='flex items-center flex-col md:flex-row justify-between max-w-[90%] mx-auto mt-10'>
                 <h2 className='font-amiri text-base md:text-2xl lg:text-4xl uppercase'>Men's Eyeglasses Collection</h2>
-                <p className='border border-[#FD7D68] text-[#FD7D68] rounded-3xl flex items-center gap-3 py-1 px-3 cursor-pointer  transition-colors'>
-                    <img src={filter} alt="" /> Filter
-                </p>
-            </div>
 
-            {/* Cards Grid - 3 cards per row */}
-            <div className="max-w-[90%] mx-auto mt-10 mb-16">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {products.map((card, idx) => {
-                        const isInWishlist = wishlist.includes(card.id);
-                        return (
-                            <div
-                                key={card.id}
-                                className="bg-white space-y-2 p-4 rounded-md shadow-md cursor-pointer transition-shadow duration-300 hover:shadow-[0_4px_6px_rgba(128,128,128,0.5)]"
-                                onMouseEnter={() => handleImageHover(card.id, true)}
-                                onMouseLeave={() => handleImageHover(card.id, false)}
-                                data-aos="fade-up"
-                                data-aos-delay={idx * 100}
-                            >
-                                <div className="bg-[#2222220A] p-6 rounded-md relative">
-                                    <div className="flex items-center justify-center h-[200px]">
-                                        <img
-                                            src={getCurrentImage(card)}
-                                            alt="Product"
-                                            className="max-h-full max-w-full transition-opacity duration-300"
-                                        />
-                                    </div>
-                                    <FaHeart
-                                        onClick={(e) => { e.stopPropagation(); toggleWishlist(card.id, card.title); }}
-                                        className={`absolute top-4 right-3 text-2xl cursor-pointer transition-colors duration-300 ${isInWishlist ? "text-[#FD7D68]" : "text-[#c2c2c2] hover:text-red-600"}`}
-                                    />
-                                    <p className="bg-[#FD7D68] py-1 px-3 rounded-3xl flex items-center gap-1 absolute top-4 left-3 text-white font-inter text-xs">
-                                        <img src={whiteStar} alt="Star" />
-                                        Top Rated
-                                    </p>
-                                </div>
-                                <div className="flex items-center justify-between flex-col md:flex-row">
-                                    <p className="text-lg font-semibold font-amiri">₹{card.price} <span className="line-through text-red-500">₹{card.originalPrice}</span></p>
-                                    <p className="flex items-center gap-1 font-inter text-sm"><img src={star} alt="Rating" />{card.rating}</p>
-                                </div>
-                                <p className="text-[#222222] text-sm font-inter">{card.title}</p>
-                                <p className="text-[#666666] text-xs font-inter">{card.description}</p>
-                                <div className="flex items-center flex-wrap gap-3 pb-4">
-                                    {card.colors && card.colors.map((color, index) => (
-                                        <div
-                                            key={index}
-                                            className={`p-2 rounded-full h-8 w-8 cursor-pointer border-2 ${selectedColors[card.id] === index ? "border-[#222222]" : "border-transparent"}`}
-                                            style={{ backgroundColor: color }}
-                                            onClick={(e) => handleColorSelect(card.id, index, e)}
-                                            title={`Color ${index + 1}`}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        );
-                    })}
+                <div className='flex items-center flex-col md:flex-row gap-3 '>
+                     <p className='border border-gray-400 text-[#999999] flex items-center justify-center py-1 px-4 rounded-3xl gap-2 font-amiri'><img src={tryon} alt="" className='h-5 w-5' />3D TRY ON</p>
+                <p 
+                    className='border border-[#FD7D68] text-[#FD7D68] rounded-3xl flex items-center gap-3 py-1 px-3 cursor-pointer transition-colors hover:bg-[#FD7D68] hover:text-white'
+                    onClick={() => setShowFilter(!showFilter)}
+                >
+                  
+                     
+                    <img src={filter} alt="Filter" /> Filter
+                 
+                </p>
                 </div>
             </div>
+
+            {/* Results Count */}
+            <div className="max-w-[90%] mx-auto mt-6 text-gray-600">
+                <p>Showing {sortedProducts.length} of {products.length} Results</p>
+            </div>
+
+            {/* Main Content with Filter Sidebar */}
+            {/* Main Content with Filter Sidebar */}
+<div className="max-w-[90%] mx-auto mt-10 mb-16 flex gap-8 relative">
+    {/* Mobile/Tablet Filter Overlay */}
+    <div className={`lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
+        showFilter ? 'opacity-100' : 'opacity-0 pointer-events-none'
+    }`} onClick={() => setShowFilter(false)}></div>
+
+    {/* Mobile/Tablet Filter Drawer */}
+    <div className={`lg:hidden fixed left-0 top-0 h-full w-80 bg-white z-50 transform transition-transform duration-300 ease-in-out ${
+        showFilter ? 'translate-x-0' : '-translate-x-full'
+    }`}>
+        <div className="h-full overflow-y-auto">
+            <FilterSidebar />
+        </div>
+    </div>
+
+    {/* Desktop Filter Sidebar */}
+    <div className={`${showFilter ? 'lg:block' : 'lg:hidden'}`}>
+        {showFilter && <FilterSidebar />}
+    </div>
+
+    {/* Cards Grid - Dynamic columns based on filter state */}
+    <div className={`${showFilter ? 'lg:flex-1' : 'w-full'}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 ${showFilter ? 'lg:grid-cols-2' : 'lg:grid-cols-3'} gap-6`}>
+            {sortedProducts.map((card, idx) => {
+                const isInWishlist = wishlist.includes(card.id);
+                return (
+                    <div
+                        key={card.id}
+                        className="bg-white space-y-2 p-4 rounded-md shadow-md cursor-pointer transition-shadow duration-300 hover:shadow-[0_4px_6px_rgba(128,128,128,0.5)]"
+                        onMouseEnter={() => handleImageHover(card.id, true)}
+                        onMouseLeave={() => handleImageHover(card.id, false)}
+                        data-aos="fade-up"
+                        data-aos-delay={idx * 100}
+                    >
+                        <div className="bg-[#2222220A] p-6 rounded-md relative">
+                            <div className="flex items-center justify-center h-[200px]">
+                                <img
+                                    src={getCurrentImage(card)}
+                                    alt="Product"
+                                    className="max-h-full max-w-full transition-opacity duration-300"
+                                />
+                            </div>
+                            <FaHeart
+                                onClick={(e) => { e.stopPropagation(); toggleWishlist(card.id, card.title); }}
+                                className={`absolute top-4 right-3 text-2xl cursor-pointer transition-colors duration-300 ${isInWishlist ? "text-[#FD7D68]" : "text-[#c2c2c2] hover:text-red-600"}`}
+                            />
+                            <p className="bg-[#FD7D68] py-1 px-3 rounded-3xl flex items-center gap-1 absolute top-4 left-3 text-white font-inter text-xs">
+                                <img src={whiteStar} alt="Star" />
+                                Top Rated
+                            </p>
+                        </div>
+                        <div className="flex items-center justify-between flex-col md:flex-row">
+                            <p className="text-lg font-semibold font-amiri">₹{card.price} <span className="line-through text-red-500">₹{card.originalPrice}</span></p>
+                            <p className="flex items-center gap-1 font-inter text-sm"><img src={star} alt="Rating" />{card.rating}</p>
+                        </div>
+                        <p className="text-[#222222] text-sm font-inter">{card.title}</p>
+                        <p className="text-[#666666] text-xs font-inter">{card.description}</p>
+                        <div className="flex items-center flex-wrap gap-3 pb-4">
+                            {card.colors && card.colors.map((color, index) => (
+                                <div
+                                    key={index}
+                                    className={`p-2 rounded-full h-8 w-8 cursor-pointer border-2 ${selectedColors[card.id] === index ? "border-[#222222]" : "border-transparent"}`}
+                                    style={{ backgroundColor: color }}
+                                    onClick={(e) => handleColorSelect(card.id, index, e)}
+                                    title={`Color ${index + 1}`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    </div>
+</div>
         </div>
     );
 };
